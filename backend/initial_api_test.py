@@ -3,6 +3,7 @@ import requests
 import firebase_admin
 from firebase_admin import firestore
 from firebase_admin import credentials
+import json
 
 cred = credentials.Certificate("therugshop-f8614-firebase-adminsdk-6akik-f5758e10ef.json")
 # firebase_admin.initialize_app(cred)
@@ -20,6 +21,13 @@ HEADERS = {
 TEST_COLLECTION = "0x7831729a089df41d7c5bcbd5cebb9d7d131addd3"
 
 DUMMY_COLLECTION_LIST = ["0x7831729a089df41d7c5bcbd5cebb9d7d131addd3"]
+
+DUMMY_FRAUD_DATA = {}
+DUMMY_FRAUD_DATA['walletAddress'] = "0x1eea95f2d2ed24cd3451da93a69efdd08767cc5b"
+DUMMY_FRAUD_DATA['twitterHandle'] = "0xMario"
+DUMMY_FRAUD_DATA['numWashCycles'] = 7
+DUMMY_FRAUD_DATA['name'] = "Mario"
+DUMMY_JSON = json.dumps(DUMMY_FRAUD_DATA)
 
 
 def get_transfer(contract_addy):
@@ -41,6 +49,10 @@ def get_sales(contract_addy, transaction_limit = 10):
 
     return response.text
 
+def push_firebase_obj(obj):
+    db.collection(u'cities').document(u'LA').set(data)
+
+    return 0
 
 get_sales(TEST_COLLECTION)
 
@@ -52,5 +64,5 @@ def main():
         # Get sales data
         sale_data = get_sales(collection_id)
         # get suspicious address data
-        suspicious_add_data = {}
+        suspicious_add_data = TODO()
         # push said data to firestore
