@@ -18,16 +18,20 @@ HEADERS = {
     'X-API-KEY': '7avWNJ6gs97YBcywmr6veXjtm8OTSW1C'
 }
 
-TEST_COLLECTION = "0x0747118C9F44C7a23365b2476dCD05E03114C747"
+TEST_COLLECTION = "0x7831729a089df41d7c5bcbd5cebb9d7d131addd3"
 
 DUMMY_COLLECTION_LIST = ["0x7831729a089df41d7c5bcbd5cebb9d7d131addd3"]
 
 DUMMY_FRAUD_DATA = {}
-DUMMY_FRAUD_DATA['walletAddress'] = "0x1eea95f2d2ed24cd3451da93a69efdd08767cc5b"
-DUMMY_FRAUD_DATA['twitterHandle'] = "0xMario"
-DUMMY_FRAUD_DATA['numWashCycles'] = 7
-DUMMY_FRAUD_DATA['name'] = "Mario"
-DUMMY_JSON = json.dumps(DUMMY_FRAUD_DATA)
+DUMMY_FRAUD_DATA[u'walletAddress'] = u"0x1eea95f2d2ed24cd3451da93a69efdd08767cc5b"
+DUMMY_FRAUD_DATA[u'twitterHandle'] = u"0xMario"
+DUMMY_FRAUD_DATA[u'numWashCycles'] = 7
+DUMMY_FRAUD_DATA[u'name'] = u"Mario"
+DUMMY_FRAUD_DATA[u'ethWashed'] = 5
+PROJECT_TEMP = {}
+PROJECT_TEMP[u'address'] = u"0x7831729a089df41d7c5bcbd5cebb9d7d131addd3"
+PROJECT_TEMP[u'name'] = u"Digital Monkeys"
+DUMMY_FRAUD_DATA[u'project'] = PROJECT_TEMP
 
 
 def get_transfer(contract_addy):
@@ -49,12 +53,13 @@ def get_sales(contract_addy, transaction_limit = 10):
 
     return response.text
 
+
 def push_firebase_obj(obj):
-    db.collection(u'cities').document(u'LA').set(data)
+    db.collection('test_group').add(obj)
 
     return 0
 
-get_sales(TEST_COLLECTION)
+push_firebase_obj(DUMMY_FRAUD_DATA)
 
 
 def main():
