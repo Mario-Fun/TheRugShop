@@ -6,7 +6,7 @@ HEADERS = {
     'X-API-KEY': '7avWNJ6gs97YBcywmr6veXjtm8OTSW1C'
 }
 
-TEST_COLLECTION = "0x7831729a089df41d7c5bcbd5cebb9d7d131addd3"
+TEST_COLLECTION = "0x0747118C9F44C7a23365b2476dCD05E03114C747"
 
 
 def get_transfer(contract_addy):
