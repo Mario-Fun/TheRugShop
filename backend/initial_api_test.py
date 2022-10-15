@@ -1,5 +1,16 @@
 import math
 import requests
+import firebase_admin
+from firebase_admin import firestore
+from firebase_admin import credentials
+
+cred = credentials.Certificate("therugshop-f8614-firebase-adminsdk-6akik-f5758e10ef.json")
+# firebase_admin.initialize_app(cred)
+
+# Application Default credentials are automatically created.
+app = firebase_admin.initialize_app(cred)
+db = firestore.client()
+
 
 HEADERS = {
     "accept": "application/json",
@@ -7,6 +18,8 @@ HEADERS = {
 }
 
 TEST_COLLECTION = "0x7831729a089df41d7c5bcbd5cebb9d7d131addd3"
+
+DUMMY_COLLECTION_LIST = ["0x7831729a089df41d7c5bcbd5cebb9d7d131addd3"]
 
 
 def get_transfer(contract_addy):
@@ -19,8 +32,8 @@ def get_transfer(contract_addy):
     return response.text
 
 
-def get_sales(contract_addy):
-    sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + contract_addy + "&order=asc&limit=10"
+def get_sales(contract_addy, transaction_limit = 10):
+    sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + contract_addy + "&order=asc&limit=" + str(transaction_limit)
 
     response = requests.get(sale_url, headers=HEADERS)
 
@@ -30,3 +43,14 @@ def get_sales(contract_addy):
 
 
 get_sales(TEST_COLLECTION)
+
+
+def main():
+    collections = DUMMY_COLLECTION_LIST
+    # Collect a list of collections to monitor
+    for collection_id in collections:
+        # Get sales data
+        sale_data = get_sales(collection_id)
+        # get suspicious address data
+        suspicious_add_data = {}
+        # push said data to firestore
