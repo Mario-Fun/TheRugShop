@@ -24,7 +24,7 @@ HEADERS = {
     'X-API-KEY': '7avWNJ6gs97YBcywmr6veXjtm8OTSW1C'
 }
 
-TEST_COLLECTION = "0x7831729a089df41d7c5bcbd5cebb9d7d131addd3"
+TEST_COLLECTION = "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
 
 json_file_path = "backend/playground-export.json"
 
@@ -40,9 +40,6 @@ to_use = np.array(data)
 while i < to_use.shape[0]:
     DUMMY_COLLECTION_LIST.append(data[i]["contract_address"])
     i = i + 1
-
-print(DUMMY_COLLECTION_LIST)
-exit(0)
 
 DUMMY_FRAUD_DATA = {}
 DUMMY_FRAUD_DATA[u'walletAddress'] = u"0x1eea95f2d2ed24cd3451da93a69efdd08767cc5b"
@@ -66,7 +63,7 @@ def get_transfer(contract_addy):
     return response.text
 
 
-def get_sales(contract_addy, transaction_limit = 1000, depth = 5):
+def get_sales(contract_addy, transaction_limit = 1000):
     # if depth == 0:
     #     return []
     
@@ -96,9 +93,11 @@ def get_sales(contract_addy, transaction_limit = 1000, depth = 5):
         # address = tx[0]
         # total_response += get_sales(address, transaction_limit, depth - 1)
         
-    sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + contract_addy + "&order=asc&limit=" + str(transaction_limit)
+    sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + str(contract_addy) + "&order=asc&limit=" + str(transaction_limit)
     response = requests.get(sale_url, headers=HEADERS)
 
+    print("response: " + response.text)
+    
     return response.text
     
 

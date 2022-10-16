@@ -1,4 +1,5 @@
 import json
+from initial_api_test import DUMMY_COLLECTION_LIST
 import networkx as nx
 
 from initial_api_test import TEST_COLLECTION, get_sales
@@ -44,4 +45,4 @@ graph = TransactionGraph(get_sales(TEST_COLLECTION))
 #print(graph.get_adj_list())
 graph1 = nx.MultiDiGraph(graph.get_adj_list())
 #print(graph1)
-print(nx.find_cycle(graph1, orientation = None))
+print(list(nx.find_cycle(graph1, orientation="ignore")))
