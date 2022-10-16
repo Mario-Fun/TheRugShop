@@ -7,6 +7,8 @@ from initial_api_test import TEST_COLLECTION, get_sales
 G = nx.MultiDiGraph()
 sale_response = get_sales(TEST_COLLECTION, 100)
 sale_response1 = sale_response
+print(sale_response)
+exit(0)
 m_num_sales = len(sale_response1["results"])
 nodes = []
 

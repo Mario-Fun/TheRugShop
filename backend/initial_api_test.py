@@ -65,39 +65,16 @@ def get_transfer(contract_addy):
 
 def get_sales(contract_addy, transaction_limit):
     sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + str(contract_addy) + "&order=asc&limit=" + str(transaction_limit)
-    sleep(0.05)
-    response = requests.get(sale_url, headers=HEADERS)
-    response.raise_for_status() 
-    total_data = []
-    if response.status_code != 204:
-        if response.json()["next"]:
-            i = 0
-            for i in range(len(response.json()["results"])):
-                total_data.append(response.json()["results"][i])
-                i = i + 1
-            get_sales_helper(contract_addy, transaction_limit, total_data)
-        return response.json()
-    return response.text()
-
-def get_sales_helper(contract_addy, transaction_limit, total_data):
-    sleep(0.05)
-    sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + str(contract_addy) + "&order=asc&limit=" + str(transaction_limit)
-    response = requests.get(sale_url, headers=HEADERS)
-    response.raise_for_status() 
-    if response.status_code != 204:
-        if response.json()["next"]:
-            i = 0
-            for i in range(len(response.json()["results"])):
-                total_data.append(response.json()["results"][i])
-                i = i + 1
-            get_sales_helper(contract_addy, transaction_limit, total_data)
-        return response.json()
-    return response.text()
-
-    print("response: " + response)
-    
-    return response.text
-    
+    sleep(0.05)     
+    new_responses = "" 
+    new_results = True
+    page = 1
+    while new_results:
+        response = requests.get(sale_url + f"&page={page}", headers=HEADERS)
+        new_responses = new_responses + response.text
+        page += 1
+        
+    return new_responses
 
 
 def push_firebase_obj(obj):
