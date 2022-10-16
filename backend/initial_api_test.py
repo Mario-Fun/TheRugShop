@@ -1,4 +1,5 @@
 import math
+import numpy as np
 from multiprocessing.connection import wait
 from time import sleep
 import requests
@@ -10,6 +11,8 @@ import json
 cred = credentials.Certificate("backend/therugshop-f8614-firebase-adminsdk-6akik-f5758e10ef.json")
 
 # firebase_admin.initialize_app(cred)
+
+import json
 
 # Application Default credentials are automatically created.
 app = firebase_admin.initialize_app(cred)
@@ -23,7 +26,23 @@ HEADERS = {
 
 TEST_COLLECTION = "0x7831729a089df41d7c5bcbd5cebb9d7d131addd3"
 
-DUMMY_COLLECTION_LIST = ["0x7831729a089df41d7c5bcbd5cebb9d7d131addd3"]
+json_file_path = "backend/playground-export.json"
+
+with open(json_file_path, 'r') as j:
+    data = json.loads(j.read())
+
+DUMMY_COLLECTION_LIST = []
+
+i = 0
+
+to_use = np.array(data)
+
+while i < to_use.shape[0]:
+    DUMMY_COLLECTION_LIST.append(data[i]["contract_address"])
+    i = i + 1
+
+print(DUMMY_COLLECTION_LIST)
+exit(0)
 
 DUMMY_FRAUD_DATA = {}
 DUMMY_FRAUD_DATA[u'walletAddress'] = u"0x1eea95f2d2ed24cd3451da93a69efdd08767cc5b"
