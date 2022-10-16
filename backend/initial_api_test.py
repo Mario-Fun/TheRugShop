@@ -58,7 +58,7 @@ def get_transfer(contract_addy):
 
     response = requests.get(transfer_url, headers=HEADERS)
 
-    print(response.text)
+    # print(response.text)
 
     return response.text
 
@@ -96,7 +96,7 @@ def get_sales(contract_addy, transaction_limit = 1000):
     sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + str(contract_addy) + "&order=asc&limit=" + str(transaction_limit)
     response = requests.get(sale_url, headers=HEADERS)
 
-    print("response: " + response.text)
+    # print("response: " + response.text)
     
     return response.text
     
