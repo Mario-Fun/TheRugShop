@@ -5,7 +5,7 @@ import networkx as nx
 from initial_api_test import TEST_COLLECTION, get_sales
 
 G = nx.MultiGraph()
-sale_response = get_sales(TEST_COLLECTION)
+sale_response = get_sales(DUMMY_COLLECTION_LIST)
 sale_response1 = json.loads(sale_response)
 m_num_sales = len(sale_response1["results"])
 nodes = []

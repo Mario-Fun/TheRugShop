@@ -95,6 +95,9 @@ def get_sales(contract_addy, transaction_limit = 1000):
         
     sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + str(contract_addy) + "&order=asc&limit=" + str(transaction_limit)
     response = requests.get(sale_url, headers=HEADERS)
+    response.raise_for_status() 
+    if response.status_code != 204:
+        return response.json()
 
     # print("response: " + response.text)
     
