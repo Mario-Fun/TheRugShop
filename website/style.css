@@ -1,0 +1,10 @@
+@font-face {
+    font-family: "DrukWideMedium";
+    src: url("Druk-Wide-Medium-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Inter Regular";
+    color: #93989A;
+    src: url("Inter-Regular.ttf") format("truetype");
+}
