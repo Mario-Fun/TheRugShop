@@ -63,56 +63,33 @@ def get_transfer(contract_addy):
     return response.text
 
 
-def get_sales(contract_addy, trasaction_limit=1000):
-    sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + str(contract_addy) + "&order=asc&limit=" + "1000"
+def get_sales(contract_addy, transaction_limit):
+    sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + str(contract_addy) + "&order=asc&limit=" + str(transaction_limit)
+    sleep(0.05)
     response = requests.get(sale_url, headers=HEADERS)
     response.raise_for_status() 
     total_data = []
     if response.status_code != 204:
         if response.json()["next"]:
-            for i in len(response.json()["results"]):
+            i = 0
+            for i in range(len(response.json()["results"])):
                 total_data.append(response.json()["results"][i])
-            get_sales_helper(contract_addy, trasaction_limit, total_data)
+                i = i + 1
+            get_sales_helper(contract_addy, transaction_limit, total_data)
         return response.json()
     return response.text()
 
 def get_sales_helper(contract_addy, transaction_limit, total_data):
-    # if depth == 0:
-    #     return []
-    
-    # sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + contract_addy + "&order=asc&limit=" + str(transaction_limit)
-
-    # sales = []
-
-    # response = requests.get(sale_url, headers=HEADERS)
-    # sleep(0.5)
-    # if "results" not in response.json():
-    #     return
-    # else:
-    #     results = response.json()["results"]
-    #     for result in results:
-    #         print(len(sales))
-    #         seller = result['seller']
-    #         buyer = result['buyer']
-    #         sales += [[seller, buyer]]
-    #         get_sales(buyer, transaction_limit, depth - 1)
-            
-    # return sales
-    
-        
-    # total_response = response[:]
-    
-    # for tx in response.text:
-        # address = tx[0]
-        # total_response += get_sales(address, transaction_limit, depth - 1)
-        
+    sleep(0.05)
     sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + str(contract_addy) + "&order=asc&limit=" + str(transaction_limit)
     response = requests.get(sale_url, headers=HEADERS)
     response.raise_for_status() 
     if response.status_code != 204:
-        if response.json["next"]:
-            for i in len(response.json["results"]):
-                total_data.append(response.json["results"][i])
+        if response.json()["next"]:
+            i = 0
+            for i in range(len(response.json()["results"])):
+                total_data.append(response.json()["results"][i])
+                i = i + 1
             get_sales_helper(contract_addy, transaction_limit, total_data)
         return response.json()
     return response.text()
