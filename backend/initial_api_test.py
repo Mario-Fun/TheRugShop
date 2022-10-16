@@ -71,3 +71,4 @@ def main():
         # get suspicious address data
         suspicious_add_data = TODO()
         # push said data to firestore
+        push_firebase_obj(suspicious_add_data) 
