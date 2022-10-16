@@ -1,6 +1,7 @@
 import json
+import networkx as nx
 
-from backend.initial_api_test import TEST_COLLECTION, get_sales
+from initial_api_test import TEST_COLLECTION, get_sales
 
 
 # input: json response from the get_sales() function
@@ -23,14 +24,24 @@ class TransactionGraph:
         for sale in self.sale_response["results"]:
             print(sale)
             self.add_edge(sale["seller"], sale["buyer"],
-                          tuple([sale["eth_price"], sale["usd_price"]]))
-
-    def add_edge(self, node1, node2, weight):
-        self.m_adjacency_list[node1].add((node2, weight))
+                        tuple([sale["eth_price"], sale["usd_price"]]))
+    
+    def is_directed(self):
+        return 1
+    
+    def add_edge(self, node1, node2,weight):
+        self.m_adjacency_list[node1].add((node2,weight))
 
     def get_adj_list(self):
         return self.m_adjacency_list
+    
+    
+# print(get_sales(TEST_COLLECTION))
 
+# exit(0)
 
 graph = TransactionGraph(get_sales(TEST_COLLECTION))
-print(graph.get_adj_list())
+#print(graph.get_adj_list())
+graph1 = nx.MultiDiGraph(graph.get_adj_list())
+#print(graph1)
+print(nx.find_cycle(graph1, orientation = None))

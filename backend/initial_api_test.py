@@ -1,11 +1,14 @@
 import math
+from multiprocessing.connection import wait
+from time import sleep
 import requests
 import firebase_admin
 from firebase_admin import firestore
 from firebase_admin import credentials
 import json
 
-cred = credentials.Certificate("therugshop-f8614-firebase-adminsdk-6akik-f5758e10ef.json")
+cred = credentials.Certificate("backend/therugshop-f8614-firebase-adminsdk-6akik-f5758e10ef.json")
+
 # firebase_admin.initialize_app(cred)
 
 # Application Default credentials are automatically created.
@@ -31,7 +34,7 @@ DUMMY_JSON = json.dumps(DUMMY_FRAUD_DATA)
 
 
 def get_transfer(contract_addy):
-    transfer_url = "https://api.transpose.io/nft/transfers-by-contract-address?contract_address=" + contract_addy + "&transfer_category=all&order=asc&limit=10"
+    transfer_url = "https://api.transpose.io/nft/transfers-by-contract-address?contract_address=" + contract_addy + "&transfer_category=all&order=asc&limit=1000"
 
     response = requests.get(transfer_url, headers=HEADERS)
 
@@ -40,14 +43,41 @@ def get_transfer(contract_addy):
     return response.text
 
 
-def get_sales(contract_addy, transaction_limit = 10):
-    sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + contract_addy + "&order=asc&limit=" + str(transaction_limit)
+def get_sales(contract_addy, transaction_limit = 1000, depth = 5):
+    # if depth == 0:
+    #     return []
+    
+    # sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + contract_addy + "&order=asc&limit=" + str(transaction_limit)
 
+    # sales = []
+
+    # response = requests.get(sale_url, headers=HEADERS)
+    # sleep(0.5)
+    # if "results" not in response.json():
+    #     return
+    # else:
+    #     results = response.json()["results"]
+    #     for result in results:
+    #         print(len(sales))
+    #         seller = result['seller']
+    #         buyer = result['buyer']
+    #         sales += [[seller, buyer]]
+    #         get_sales(buyer, transaction_limit, depth - 1)
+            
+    # return sales
+    
+        
+    # total_response = response[:]
+    
+    # for tx in response.text:
+        # address = tx[0]
+        # total_response += get_sales(address, transaction_limit, depth - 1)
+        
+    sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + contract_addy + "&order=asc&limit=" + str(transaction_limit)
     response = requests.get(sale_url, headers=HEADERS)
 
-    print(response.text)
-
     return response.text
+    
 
 def push_firebase_obj(obj):
     db.collection(u'cities').document(u'LA').set(data)
