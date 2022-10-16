@@ -24,21 +24,21 @@ HEADERS = {
     'X-API-KEY': '7avWNJ6gs97YBcywmr6veXjtm8OTSW1C'
 }
 
-TEST_COLLECTION = "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D"
+TEST_COLLECTION = "0x7AB2352b1D2e185560494D5e577F9D3c238b78C5"
 
 json_file_path = "backend/playground-export.json"
 
 with open(json_file_path, 'r') as j:
     data = json.loads(j.read())
 
-DUMMY_COLLECTION_LIST = []
+COLLECTION_LIST = []
 
 i = 0
 
 to_use = np.array(data)
 
 while i < to_use.shape[0]:
-    DUMMY_COLLECTION_LIST.append(data[i]["contract_address"])
+    COLLECTION_LIST.append(data[i]["contract_address"])
     i = i + 1
 
 DUMMY_FRAUD_DATA = {}
@@ -54,7 +54,7 @@ DUMMY_FRAUD_DATA[u'project'] = PROJECT_TEMP
 
 
 def get_transfer(contract_addy):
-    transfer_url = "https://api.transpose.io/nft/transfers-by-contract-address?contract_address=" + contract_addy + "&transfer_category=all&order=asc&limit=1000"
+    transfer_url = "https://api.transpose.io/nft/transfers-by-contract-address?contract_address=" + contract_addy + "&transfer_category=all&order=asc&limit=2000"
 
     response = requests.get(transfer_url, headers=HEADERS)
 
@@ -63,7 +63,20 @@ def get_transfer(contract_addy):
     return response.text
 
 
-def get_sales(contract_addy, transaction_limit = 1000):
+def get_sales(contract_addy, trasaction_limit=1000):
+    sale_url = "https://api.transpose.io/nft/sales-by-contract-address?contract_address=" + str(contract_addy) + "&order=asc&limit=" + "1000"
+    response = requests.get(sale_url, headers=HEADERS)
+    response.raise_for_status() 
+    total_data = []
+    if response.status_code != 204:
+        if response.json()["next"]:
+            for i in len(response.json()["results"]):
+                total_data.append(response.json()["results"][i])
+            get_sales_helper(contract_addy, trasaction_limit, total_data)
+        return response.json()
+    return response.text()
+
+def get_sales_helper(contract_addy, transaction_limit, total_data):
     # if depth == 0:
     #     return []
     
@@ -97,9 +110,14 @@ def get_sales(contract_addy, transaction_limit = 1000):
     response = requests.get(sale_url, headers=HEADERS)
     response.raise_for_status() 
     if response.status_code != 204:
+        if response.json["next"]:
+            for i in len(response.json["results"]):
+                total_data.append(response.json["results"][i])
+            get_sales_helper(contract_addy, transaction_limit, total_data)
         return response.json()
+    return response.text()
 
-    # print("response: " + response.text)
+    print("response: " + response)
     
     return response.text
     
